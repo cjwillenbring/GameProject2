@@ -5,68 +5,9 @@ using Microsoft.Xna.Framework;
 
 namespace GameProject1
 {
-    public struct BoundingCircle
-    {
-        public float X;
-        public float Y;
-        public float Radius;
-    }
-
-    public struct BoundingRectangle
-    {
-        public float X;
-        public float Y;
-        public float Width;
-        public float Height;
-    }
-
-    public struct BoundingPoint
-    {
-        public float X;
-        public float Y;
-
-        /// <summary>
-        /// Constructs a BoundingPoint with the provided coordinates
-        /// </summary>
-        /// <param name="x">The x coordinate</param>
-        /// <param name="y">The y coordinate</param>
-        public BoundingPoint(float x, float y)
-        {
-            X = x;
-            Y = y;
-        }
-
-        /// <summary>
-        /// Determines if this BoundingPoint collides with another BoundingPoint
-        /// </summary>
-        /// <param name="o">the other bounding point</param>
-        /// <returns>true on collision, false otherwise</returns>
-        public bool CollidesWith(BoundingPoint o)
-        {
-            return CollisionHelper.Collides(o, this);
-        }
-
-        /// <summary>
-        /// Determines if this BoundingPoint collides with a BoundingCircle
-        /// </summary>
-        /// <param name="c">the BoundingCircle</param>
-        /// <returns>true on collision, false otherwise</returns>
-        public bool CollidesWith(BoundingCircle c)
-        {
-            return CollisionHelper.Collides(c, this);
-        }
-
-        /// <summary>
-        /// Determines if this BoundingPoint collides with a BoundingCircle
-        /// </summary>
-        /// <param name="r">the BoundingRectangle</param>
-        /// <returns>true on collision, false otherwise</returns>
-        public bool CollidesWith(BoundingRectangle r)
-        {
-            return CollisionHelper.Collides(r, this);
-        }
-    }
-
+    /// <summary>
+    /// Static class holding helper methods for calculating/validating collisions and collision logic
+    /// </summary>
     public static class CollisionHelper
     {
         /// <summary>
