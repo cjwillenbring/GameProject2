@@ -15,6 +15,7 @@ namespace GameProject1
         private SlimeGhostSprite slimeGhost;
         private Texture2D atlas;
         private BatSprite[] bats;
+        private Enemy[] enemies;
         private SpriteFont bangers;
 
         /// <summary>
@@ -39,6 +40,11 @@ namespace GameProject1
                 new BatSprite() { Position = new Vector2(100,100), Direction = Direction.Down },
                 new BatSprite() { Position = new Vector2(400,400), Direction = Direction.Up },
                 new BatSprite() { Position = new Vector2(200,500), Direction = Direction.Left },
+            };
+            enemies = new Enemy[]
+            {
+                new Enemy(),
+                new Enemy()
             };
 
             base.Initialize();
@@ -70,6 +76,7 @@ namespace GameProject1
             // TODO: Add your update logic here
             slimeGhost.Update(gameTime);
             foreach (var bat in bats) bat.Update(gameTime);
+            foreach (var enemy in enemies) enemy.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -86,6 +93,7 @@ namespace GameProject1
             spriteBatch.Begin();
             spriteBatch.Draw(atlas, new Vector2(50, 50), new Rectangle(16 * 6, 16, 16, 16), Color.White);
             foreach (var bat in bats) bat.Draw(gameTime, spriteBatch);
+            foreach (var enemy in enemies) enemy.Draw(gameTime, spriteBatch, atlas);
             slimeGhost.Draw(gameTime, spriteBatch);
             spriteBatch.DrawString(bangers, $"{gameTime.TotalGameTime:c}", new Vector2(50, 50), Color.Gold);
             spriteBatch.End();

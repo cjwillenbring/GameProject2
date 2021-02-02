@@ -12,7 +12,7 @@ namespace GameProject1
         /// <summary>
         /// Stores the location of the enemy object on the sprite atlas
         /// </summary>
-        private static Rectangle atlas_location = new Rectangle(19*6, 9*6, 16, 16);
+        private static Rectangle atlas_location = new Rectangle(19*16, 10*16, 16, 16);
 
         /// <summary>
         /// Sores the random generator for the enemy class
@@ -22,7 +22,7 @@ namespace GameProject1
         ///<summary>
         /// The enemy's position in the world
         ///</summary>
-        public Vector2 Position { get; set; }
+        private Vector2 position;
 
         /// <summary>
         /// The enemy's scale for when it gets rendered
@@ -37,6 +37,7 @@ namespace GameProject1
         
         public Enemy()
         {
+            position = new Vector2((float)rand.NextDouble() * 1000, 0);
             speed = rand.Next(30, 400);
             float rand_scale = (float)rand.NextDouble()*3;
             if(rand_scale > .2)
@@ -51,12 +52,12 @@ namespace GameProject1
 
         public void Update(GameTime gameTime)
         {
-            Position += new Vector2(0, 1) * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            position += new Vector2(0, 1) * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D atlas)
         {
-            spriteBatch.Draw(atlas, Position, atlas_location, Color.White, 0, new Vector2(0,0), scalar, SpriteEffects.None, 0);
+            spriteBatch.Draw(atlas, position, atlas_location, Color.White, 0, new Vector2(0,0), scalar, SpriteEffects.None, 0);
         }
     }
 }
