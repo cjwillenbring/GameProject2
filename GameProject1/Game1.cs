@@ -18,6 +18,8 @@ namespace GameProject1
         private Texture2D atlas;
         private List<Enemy> enemies;
         private SpriteFont bangers;
+        private int wave;
+        private int enemyTotal;
 
         /// <summary>
         /// Constructs the game
@@ -39,6 +41,7 @@ namespace GameProject1
             Enemy.RegisterViewportWidth(GraphicsDevice.Viewport.Width);
             enemies = new List<Enemy>() {};
             for (int i = 0; i < 10; i++) enemies.Add(new Enemy());
+            wave = 1;
 
             base.Initialize();
         }
@@ -76,7 +79,11 @@ namespace GameProject1
                     toRemove.Add(enemy);
                 }
             }
-            foreach (var e in toRemove) enemies.Remove(e);
+            foreach (var e in toRemove)
+            {
+                enemyTotal += 1;
+                enemies.Remove(e);
+            }
 
             base.Update(gameTime);
         }
@@ -93,7 +100,8 @@ namespace GameProject1
             spriteBatch.Begin();
             foreach (var enemy in enemies) enemy.Draw(gameTime, spriteBatch, atlas);
             slimeGhost.Draw(gameTime, spriteBatch);
-            spriteBatch.DrawString(bangers, $"{gameTime.TotalGameTime.TotalSeconds:c}", new Vector2(50, 50), Color.Gold);
+            spriteBatch.DrawString(bangers, $"Wave : {wave}     {gameTime.TotalGameTime.TotalSeconds:f2}", new Vector2(20, 20), Color.Gold);
+            spriteBatch.DrawString(bangers, $"Enemies Dodged : {enemyTotal}", new Vector2(400, 20), Color.Gold);
             spriteBatch.End();
 
             base.Draw(gameTime);
