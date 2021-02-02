@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
+using System;
 
 namespace GameProject1
 {
@@ -14,8 +16,7 @@ namespace GameProject1
 
         private SlimeGhostSprite slimeGhost;
         private Texture2D atlas;
-        private BatSprite[] bats;
-        private Enemy[] enemies;
+        private List<Enemy> enemies;
         private SpriteFont bangers;
 
         /// <summary>
@@ -35,17 +36,9 @@ namespace GameProject1
         {
             // TODO: Add your initialization logic here
             slimeGhost = new SlimeGhostSprite();
-            bats = new BatSprite[]
-            {
-                new BatSprite() { Position = new Vector2(100,100), Direction = Direction.Down },
-                new BatSprite() { Position = new Vector2(400,400), Direction = Direction.Up },
-                new BatSprite() { Position = new Vector2(200,500), Direction = Direction.Left },
-            };
-            enemies = new Enemy[]
-            {
-                new Enemy(),
-                new Enemy()
-            };
+            Enemy.RegisterViewportWidth(GraphicsDevice.Viewport.Width);
+            enemies = new List<Enemy>() {};
+            for (int i = 0; i < 10; i++) enemies.Add(new Enemy());
 
             base.Initialize();
         }
@@ -60,7 +53,6 @@ namespace GameProject1
             // TODO: use this.Content to load your game content here
             slimeGhost.LoadContent(Content);
             atlas = Content.Load<Texture2D>("colored_packed");
-            foreach (var bat in bats) bat.LoadContent(Content);
             bangers = Content.Load<SpriteFont>("bangers");
         }
 
@@ -75,8 +67,16 @@ namespace GameProject1
 
             // TODO: Add your update logic here
             slimeGhost.Update(gameTime);
-            foreach (var bat in bats) bat.Update(gameTime);
-            foreach (var enemy in enemies) enemy.Update(gameTime);
+            List<Enemy> toRemove = new List<Enemy>();
+            foreach (var enemy in enemies)
+            {
+                enemy.Update(gameTime);
+                if (enemy.Position.Y > GraphicsDevice.Viewport.Height)
+                {
+                    toRemove.Add(enemy);
+                }
+            }
+            foreach (var e in toRemove) enemies.Remove(e);
 
             base.Update(gameTime);
         }
@@ -87,15 +87,13 @@ namespace GameProject1
         /// <param name="gameTime">the measured game time</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.DarkSlateGray);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(atlas, new Vector2(50, 50), new Rectangle(16 * 6, 16, 16, 16), Color.White);
-            foreach (var bat in bats) bat.Draw(gameTime, spriteBatch);
             foreach (var enemy in enemies) enemy.Draw(gameTime, spriteBatch, atlas);
             slimeGhost.Draw(gameTime, spriteBatch);
-            spriteBatch.DrawString(bangers, $"{gameTime.TotalGameTime:c}", new Vector2(50, 50), Color.Gold);
+            spriteBatch.DrawString(bangers, $"{gameTime.TotalGameTime.TotalSeconds:c}", new Vector2(50, 50), Color.Gold);
             spriteBatch.End();
 
             base.Draw(gameTime);

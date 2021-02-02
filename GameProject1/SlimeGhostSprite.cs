@@ -21,7 +21,7 @@ namespace GameProject1
 
         private bool flipped;
 
-        private Vector2 position = new Vector2(200, 200);
+        private Vector2 position = new Vector2(300, 430);
 
         /// <summary>
         /// Loads the sprite texture using the provided ContentManager
@@ -42,13 +42,11 @@ namespace GameProject1
             keyboardState = Keyboard.GetState();
 
             // Apply the gamepad movement with inverted Y axis
-            position += gamePadState.ThumbSticks.Left * new Vector2(1, -1);
+            position += gamePadState.ThumbSticks.Left.X * new Vector2(1, 0);
             if (gamePadState.ThumbSticks.Left.X < 0) flipped = true;
             if (gamePadState.ThumbSticks.Left.X > 0) flipped = false;
 
             // Apply keyboard movement
-            if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) position += new Vector2(0, -1);
-            if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S)) position += new Vector2(0, 1);
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
             {
                 flipped = true;
@@ -69,7 +67,7 @@ namespace GameProject1
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             SpriteEffects spriteEffects = (flipped) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            spriteBatch.Draw(texture, position, null, Color.White, 0, new Vector2(64, 64), .5f, spriteEffects, 0);
+            spriteBatch.Draw(texture, position, null, Color.White, 0, new Vector2(64, 64), .35f, spriteEffects, 0);
         }
     }
 }
