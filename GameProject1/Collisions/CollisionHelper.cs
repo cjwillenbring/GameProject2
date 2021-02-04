@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace GameProject1
+namespace GameProject1.Collisions
 {
     /// <summary>
     /// Static class holding helper methods for calculating/validating collisions and collision logic

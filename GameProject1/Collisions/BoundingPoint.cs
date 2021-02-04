@@ -2,55 +2,49 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GameProject1
+namespace GameProject1.Collisions
 {
     /// <summary>
-    /// Holds the logic for the bounding rectangle
+    /// Holds the logic for the bounding point
     /// </summary>
-    public struct BoundingRectangle
+    public struct BoundingPoint
     {
         public float X;
         public float Y;
-        public float Width;
-        public float Height;
 
         /// <summary>
-        /// Constructs a BoundingRectangle with the provided coordinates
+        /// Constructs a BoundingPoint with the provided coordinates
         /// </summary>
         /// <param name="x">The x coordinate</param>
         /// <param name="y">The y coordinate</param>
-        /// <param name="w">The width of the rectangle</param>
-        /// <param name="h">The height of the rectangle</param>
-        public BoundingRectangle(float x, float y, float w, float h)
+        public BoundingPoint(float x, float y)
         {
             X = x;
             Y = y;
-            Width = w;
-            Height = h;
         }
 
         /// <summary>
-        /// Determines if this BoundingRectangle collides with a BoundingPoint
+        /// Determines if this BoundingPoint collides with another BoundingPoint
         /// </summary>
-        /// <param name="p">the bounding point</param>
+        /// <param name="o">the other bounding point</param>
         /// <returns>true on collision, false otherwise</returns>
-        public bool CollidesWith(BoundingPoint p)
+        public bool CollidesWith(BoundingPoint o)
         {
-            return CollisionHelper.Collides(this, p);
+            return CollisionHelper.Collides(o, this);
         }
 
         /// <summary>
-        /// Determines if this BoundingRectangle collides with a BoundingCircle
+        /// Determines if this BoundingPoint collides with a BoundingCircle
         /// </summary>
         /// <param name="c">the BoundingCircle</param>
         /// <returns>true on collision, false otherwise</returns>
         public bool CollidesWith(BoundingCircle c)
         {
-            return CollisionHelper.Collides(this, c);
+            return CollisionHelper.Collides(c, this);
         }
 
         /// <summary>
-        /// Determines if this BoundingRectangle collides with a BoundingRectangle
+        /// Determines if this BoundingPoint collides with a BoundingCircle
         /// </summary>
         /// <param name="r">the BoundingRectangle</param>
         /// <returns>true on collision, false otherwise</returns>

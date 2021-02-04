@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GameProject1
+namespace GameProject1.Collisions
 {
     /// <summary>
     /// Holds the logic for a bounding circle

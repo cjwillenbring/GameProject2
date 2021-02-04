@@ -85,6 +85,15 @@ namespace GameProject1
                 enemies.Remove(e);
             }
 
+            slimeGhost.Color = Color.White;
+            foreach(var enemy in enemies)
+            {
+                if(enemy.Bounds.CollidesWith(slimeGhost.Bounds))
+                {
+                    slimeGhost.Color = Color.Red;
+                }
+            }
+
             base.Update(gameTime);
         }
 

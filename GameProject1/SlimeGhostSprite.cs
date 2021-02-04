@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using GameProject1.Collisions;
 
 namespace GameProject1
 {
@@ -22,6 +23,18 @@ namespace GameProject1
         private bool flipped;
 
         private Vector2 position = new Vector2(300, 430);
+
+        private BoundingCircle bounds = new BoundingCircle(200, 200, 64*.35f);
+
+        /// <summary>
+        /// The bounding volume of the sprite
+        /// </summary>
+        public BoundingCircle Bounds { get => bounds; }
+
+        /// <summary>
+        /// Holds the color of the slime ghost
+        /// </summary>
+        public Color Color { get; set; } = Color.White;
 
         /// <summary>
         /// Loads the sprite texture using the provided ContentManager
@@ -57,6 +70,8 @@ namespace GameProject1
                 position += new Vector2(1, 0);
                 flipped = false;
             }
+            bounds.X = position.X;
+            bounds.Y = position.Y;
         }            
 
         /// <summary>
@@ -67,7 +82,7 @@ namespace GameProject1
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             SpriteEffects spriteEffects = (flipped) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            spriteBatch.Draw(texture, position, null, Color.White, 0, new Vector2(64, 64), .35f, spriteEffects, 0);
+            spriteBatch.Draw(texture, position, null, Color, 0, new Vector2(64*.35f, 64*.35f), .35f, spriteEffects, 0);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using GameProject1.Collisions;
 
 namespace GameProject1
 {
@@ -39,7 +40,14 @@ namespace GameProject1
         /// The speed of the enemy falling
         /// </summary>
         private int speed;
-        
+
+        private BoundingRectangle bounds;
+
+        /// <summary>
+        /// The bounding volume of the sprite
+        /// </summary>
+        public BoundingRectangle Bounds { get => bounds; }
+
         public Enemy()
         {
             position = new Vector2((float)rand.NextDouble() * viewportWidth, 0);
@@ -53,6 +61,7 @@ namespace GameProject1
             {
                 scalar = new Vector2(1, 1);
             }
+            bounds = new BoundingRectangle((int)position.X, (int)position.Y, 16 * (int)scalar.X, 16 * (int)scalar.Y);
         }
 
         public static void RegisterViewportWidth(int w)
@@ -63,6 +72,8 @@ namespace GameProject1
         public void Update(GameTime gameTime)
         {
             position += new Vector2(0, 1) * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            bounds.X = position.X;
+            bounds.Y = position.Y;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D atlas)
