@@ -21,6 +21,7 @@ namespace GameProject1
         private int wave;
         private int enemyTotal;
         private Texture2D ball;
+        private Texture2D background_texture;
 
         /// <summary>
         /// Constructs the game
@@ -59,6 +60,7 @@ namespace GameProject1
             atlas = Content.Load<Texture2D>("colored_packed");
             bangers = Content.Load<SpriteFont>("bangers");
             ball = Content.Load<Texture2D>("basketball");
+            background_texture = Content.Load<Texture2D>("space");
 
         }
 
@@ -115,6 +117,8 @@ namespace GameProject1
             GraphicsDevice.Clear(Color.DarkSlateGray);
             // TODO: Add your drawing code here
             spriteBatch.Begin();
+            spriteBatch.Draw(background_texture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+
             foreach (var enemy in enemies) {
                 enemy.Draw(gameTime, spriteBatch, atlas);
                 /* Visual Debugging */
