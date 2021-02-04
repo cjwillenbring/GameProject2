@@ -49,13 +49,13 @@ namespace GameProject1
         /// Updates the sprite's position based on user input
         /// </summary>
         /// <param name="gameTime">The GameTime</param>
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, int screenWidth)
         {
             gamePadState = GamePad.GetState(0);
             keyboardState = Keyboard.GetState();
 
             // Apply the gamepad movement with inverted Y axis
-            position += gamePadState.ThumbSticks.Left.X * new Vector2(2, 0);
+            position += gamePadState.ThumbSticks.Left.X * new Vector2(1, 0) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (gamePadState.ThumbSticks.Left.X < 0) flipped = true;
             if (gamePadState.ThumbSticks.Left.X > 0) flipped = false;
 
@@ -63,12 +63,19 @@ namespace GameProject1
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
             {
                 flipped = true;
-                position += new Vector2(-2, 0);
+                position += new Vector2(-1,0) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
             if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
             {
-                position += new Vector2(2, 0);
+                position += new Vector2(1, 0) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 flipped = false;
+            }
+            if(position.X - (64*.35) > screenWidth)
+            {
+                position.X = 1;
+            } else if (position.X < 0)
+            {
+                position.X = (float)(screenWidth - ((64 * .35) + 1));
             }
             /*
             if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S))

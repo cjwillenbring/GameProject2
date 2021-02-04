@@ -22,6 +22,13 @@ namespace GameProject1
         private int enemyTotal;
         private Texture2D ball;
         private Texture2D background_texture;
+        private int lives;
+
+        private double waveStart;
+        private double waveTimer;
+        private int waveHeats;
+
+        private Random random;
 
         /// <summary>
         /// Constructs the game
@@ -31,6 +38,11 @@ namespace GameProject1
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+        }
+
+        private void Reset()
+        {
+
         }
 
         /// <summary>
@@ -43,7 +55,12 @@ namespace GameProject1
             Enemy.RegisterViewportWidth(GraphicsDevice.Viewport.Width);
             enemies = new List<Enemy>() {};
             wave = 1;
-            for (int i = 0; i < 10; i++) enemies.Add(new Enemy(wave));
+            waveTimer = 0;
+            waveStart = 0;
+            waveHeats = 0;
+            lives = 3;
+            for (int i = 0; i < 10; i++) enemies.Add(new Enemy());
+            random = new Random();
 
             base.Initialize();
         }
@@ -64,7 +81,7 @@ namespace GameProject1
 
         }
 
-        /// <summary>
+        /// <summary>d
         /// Updates the game world
         /// </summary>
         /// <param name="gameTime">the measured game time</param>
@@ -73,8 +90,15 @@ namespace GameProject1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            waveTimer += gameTime.ElapsedGameTime.TotalSeconds;
+            if(waveTimer - waveStart > random.Next(3,5)*(waveHeats+1) && waveHeats < wave)
+            {
+                for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Enemy());
+                waveHeats++;
+            }
+
             // TODO: Add your update logic here
-            slimeGhost.Update(gameTime);
+            slimeGhost.Update(gameTime, GraphicsDevice.Viewport.Width);
             List<Enemy> toRemove = new List<Enemy>();
             foreach (var enemy in enemies)
             {
@@ -99,10 +123,13 @@ namespace GameProject1
                 }
             }
 
-            if(enemies.Count == 0)
+            if (enemies.Count == 0 && waveHeats == wave)
             {
                 wave += 1;
-                for (int i = 0; i < 10 + wave; i++) enemies.Add(new Enemy(wave));
+                waveStart = gameTime.TotalGameTime.TotalSeconds;
+                waveTimer = waveStart;
+                waveHeats = 0;
+                for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Enemy());
             }
 
             base.Update(gameTime);
@@ -134,7 +161,7 @@ namespace GameProject1
             */
 
             slimeGhost.Draw(gameTime, spriteBatch);
-            spriteBatch.DrawString(bangers, $"Wave : {wave}     {gameTime.TotalGameTime.TotalSeconds:f2}", new Vector2(20, 20), Color.Gold);
+            spriteBatch.DrawString(bangers, $"Wave : {wave}", new Vector2(20, 20), Color.Gold);
             spriteBatch.DrawString(bangers, $"Enemies Dodged : {enemyTotal}", new Vector2(400, 20), Color.Gold);
             spriteBatch.End();
 

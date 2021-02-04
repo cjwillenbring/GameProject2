@@ -51,10 +51,10 @@ namespace GameProject1
         /// </summary>
         public BoundingCircle Bounds { get => bounds; }
 
-        public Enemy(int waveSpeedMultiplier)
+        public Enemy()
         {
             position = new Vector2((float)rand.NextDouble() * viewportWidth, 0);
-            speed = rand.Next(40, Math.Min(80*waveSpeedMultiplier,400));
+            speed = rand.Next(40, 150);
             float rand_scale = (float)rand.NextDouble()*5;
             if(rand_scale > .5)
             {
