@@ -20,6 +20,7 @@ namespace GameProject1
         private SpriteFont bangers;
         private int wave;
         private int enemyTotal;
+        private Texture2D ball;
 
         /// <summary>
         /// Constructs the game
@@ -40,8 +41,8 @@ namespace GameProject1
             slimeGhost = new SlimeGhostSprite();
             Enemy.RegisterViewportWidth(GraphicsDevice.Viewport.Width);
             enemies = new List<Enemy>() {};
-            for (int i = 0; i < 10; i++) enemies.Add(new Enemy());
             wave = 1;
+            for (int i = 0; i < 10; i++) enemies.Add(new Enemy(wave));
 
             base.Initialize();
         }
@@ -57,6 +58,8 @@ namespace GameProject1
             slimeGhost.LoadContent(Content);
             atlas = Content.Load<Texture2D>("colored_packed");
             bangers = Content.Load<SpriteFont>("bangers");
+            ball = Content.Load<Texture2D>("basketball");
+
         }
 
         /// <summary>
@@ -94,6 +97,12 @@ namespace GameProject1
                 }
             }
 
+            if(enemies.Count == 0)
+            {
+                wave += 1;
+                for (int i = 0; i < 10 + wave; i++) enemies.Add(new Enemy(wave));
+            }
+
             base.Update(gameTime);
         }
 
@@ -104,10 +113,22 @@ namespace GameProject1
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.DarkSlateGray);
-
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            foreach (var enemy in enemies) enemy.Draw(gameTime, spriteBatch, atlas);
+            foreach (var enemy in enemies) {
+                enemy.Draw(gameTime, spriteBatch, atlas);
+                /* Visual Debugging */
+                /*
+                var rect = new Rectangle((int)(enemy.Bounds.X - enemy.Bounds.Radius), (int)(enemy.Bounds.Y - enemy.Bounds.Radius), (int)(2 * enemy.Bounds.Radius), (int)(2 * enemy.Bounds.Radius));
+                spriteBatch.Draw(ball, rect, Color.Red);
+                */
+            }
+            /* Visual Debugging */
+            /*
+            var rect2 = new Rectangle((int)(slimeGhost.Bounds.X - slimeGhost.Bounds.Radius), (int)(slimeGhost.Bounds.Y - slimeGhost.Bounds.Radius), (int)(2 * slimeGhost.Bounds.Radius), (int)(2 * slimeGhost.Bounds.Radius));
+            spriteBatch.Draw(ball, rect2, Color.Brown);
+            */
+
             slimeGhost.Draw(gameTime, spriteBatch);
             spriteBatch.DrawString(bangers, $"Wave : {wave}     {gameTime.TotalGameTime.TotalSeconds:f2}", new Vector2(20, 20), Color.Gold);
             spriteBatch.DrawString(bangers, $"Enemies Dodged : {enemyTotal}", new Vector2(400, 20), Color.Gold);
