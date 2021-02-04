@@ -51,6 +51,8 @@ namespace GameProject1
         /// </summary>
         public BoundingCircle Bounds { get => bounds; }
 
+        public bool HasCollided { get; set; }
+
         public Enemy()
         {
             position = new Vector2((float)rand.NextDouble() * viewportWidth, 0);

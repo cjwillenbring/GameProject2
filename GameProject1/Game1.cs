@@ -23,6 +23,7 @@ namespace GameProject1
         private Texture2D ball;
         private Texture2D background_texture;
         private int lives;
+        private int best;
 
         private double waveStart;
         private double waveTimer;
@@ -42,7 +43,14 @@ namespace GameProject1
 
         private void Reset()
         {
-
+            enemies = new List<Enemy>() { };
+            wave = 1;
+            waveTimer = 0;
+            waveStart = 0;
+            waveHeats = 0;
+            lives = 3;
+            enemyTotal = 0;
+            for (int i = 0; i < 10; i++) enemies.Add(new Enemy());
         }
 
         /// <summary>
@@ -111,6 +119,7 @@ namespace GameProject1
             foreach (var e in toRemove)
             {
                 enemyTotal += 1;
+                best = Math.Max(best, enemyTotal);
                 enemies.Remove(e);
             }
 
@@ -120,6 +129,11 @@ namespace GameProject1
                 if(enemy.Bounds.CollidesWith(slimeGhost.Bounds))
                 {
                     slimeGhost.Color = Color.Red;
+                    if(!enemy.HasCollided)
+                    {
+                        enemy.HasCollided = true;
+                        lives -= 1;
+                    }
                 }
             }
 
@@ -130,6 +144,11 @@ namespace GameProject1
                 waveTimer = waveStart;
                 waveHeats = 0;
                 for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Enemy());
+            }
+
+            if(lives < 1)
+            {
+                Reset();
             }
 
             base.Update(gameTime);
@@ -162,7 +181,9 @@ namespace GameProject1
 
             slimeGhost.Draw(gameTime, spriteBatch);
             spriteBatch.DrawString(bangers, $"Wave : {wave}", new Vector2(20, 20), Color.Gold);
+            spriteBatch.DrawString(bangers, $"Lives : {lives}", new Vector2(20, 60), Color.Gold);
             spriteBatch.DrawString(bangers, $"Enemies Dodged : {enemyTotal}", new Vector2(400, 20), Color.Gold);
+            spriteBatch.DrawString(bangers, $"Best : {best}", new Vector2(587, 60), Color.Gold);
             spriteBatch.End();
 
             base.Draw(gameTime);
