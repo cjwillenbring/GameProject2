@@ -51,13 +51,16 @@ namespace GameProject1
         /// <param name="gameTime">The GameTime</param>
         public void Update(GameTime gameTime, int screenWidth)
         {
-            gamePadState = GamePad.GetState(0);
             keyboardState = Keyboard.GetState();
 
             // Apply the gamepad movement with inverted Y axis
+            /* Don't have gamepad to test so commenting out for now
+            gamePadState = GamePad.GetState(0);
+
             position += gamePadState.ThumbSticks.Left.X * new Vector2(1, 0) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (gamePadState.ThumbSticks.Left.X < 0) flipped = true;
             if (gamePadState.ThumbSticks.Left.X > 0) flipped = false;
+            */
 
             // Apply keyboard movement
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
@@ -77,16 +80,14 @@ namespace GameProject1
             {
                 position.X = (float)(screenWidth - ((64 * .35) + 1));
             }
-            /*
-            if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S))
+            if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S) && position.Y <= 430)
             {
-                position += new Vector2(0, 2);
+                position += new Vector2(0, 1) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W))
+            if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W) && position.Y >= 370)
             {
-                position += new Vector2(0, -2);
+                position += new Vector2(0, -1) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            */
             bounds.X = position.X;
             bounds.Y = position.Y;
         }            
