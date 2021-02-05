@@ -53,10 +53,10 @@ namespace GameProject1
 
         public bool HasCollided { get; set; }
 
-        public Enemy()
+        public Enemy(int waveSpeedMultiplier)
         {
             position = new Vector2((float)rand.NextDouble() * viewportWidth, 0);
-            speed = rand.Next(40, 150);
+            speed = rand.Next(40, 70*waveSpeedMultiplier);
             float rand_scale = (float)rand.NextDouble()*5;
             if(rand_scale > .5)
             {

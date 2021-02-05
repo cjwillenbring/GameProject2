@@ -80,13 +80,19 @@ namespace GameProject1
             {
                 position.X = (float)(screenWidth - ((64 * .35) + 1));
             }
-            if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S) && position.Y <= 430)
+            if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S))
             {
                 position += new Vector2(0, 1) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
-            if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W) && position.Y >= 370)
+            if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W))
             {
                 position += new Vector2(0, -1) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
+            if(position.Y > 480 - (64 * .35))
+            {
+                position.Y = (float)(480 - (64 * .35))+1;
+            } else if (position.Y < 0 + (64 * .35)) {
+                position.Y = (float)(64 * .35)+1;
             }
             bounds.X = position.X;
             bounds.Y = position.Y;
