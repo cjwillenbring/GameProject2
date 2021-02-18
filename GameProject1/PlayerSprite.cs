@@ -129,14 +129,14 @@ namespace GameProject1
             // Handle keyboard left click
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
             {
-                if(!IsInAir()) Direction = Direction.Lateral;
+                if(!IsInAir() || OnPlatform) Direction = Direction.Lateral;
                 flipped = false;
                 distanceTraveled += -unitX * speed * t;
             }
             // Handle keyboard right click
             if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
             {
-                if (!IsInAir()) Direction = Direction.Lateral;
+                if (!IsInAir() || OnPlatform) Direction = Direction.Lateral;
                 distanceTraveled += unitX * speed * t;
                 flipped = true;
             }
@@ -153,14 +153,14 @@ namespace GameProject1
             else speed.Y += gravity * t;
 
             // Apply instantaneous acceleration impulse if on ground and up key is pressed
-            if ((keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) && !IsInAir())
+            if ((keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) && (!IsInAir() || OnPlatform))
             {
                 speed.Y += -30000 * t;
             }
             distanceTraveled += unitY * speed * t;
 
             // Update direction based on speed if player is in the air
-            if (IsInAir() && speed.Y > 0) Direction = Direction.Fall;
+            if (IsInAir() && speed.Y > 0 && !OnPlatform) Direction = Direction.Fall;
             else if (IsInAir() && speed.Y <= 0) Direction = Direction.Jump;
 
             // Make sure player stays in bounds
@@ -175,15 +175,25 @@ namespace GameProject1
 
             OnPlatform = false;
             // Handle platform logic
-            foreach (var p in platforms)
+            if(position.Y >= 300 - playerHeight && speed.Y > 0 && (position.X > 334 - playerWidth && position.X < 472 + 46) && lastPos.Y <= 300 - playerHeight/2)
             {
-                if (p.Bounds.CollidesWith(bounds))
-                {
-                    if (lastPos.Y < 300 - 40) 
-                        OnPlatform = true;
-
-                }
+                speed.Y = 0;
+                distanceTraveled.Y = 0;
+                OnPlatform = true;
             }
+            if (position.Y >= 250 - playerHeight && speed.Y > 0 && (position.X > (334-275) - playerWidth && position.X < 472 - 275 + 46) && lastPos.Y <= 250 - playerHeight/2)
+            {
+                speed.Y = 0;
+                distanceTraveled.Y = 0;
+                OnPlatform = true;
+            }
+            if (position.Y >= 250 - playerHeight && speed.Y > 0 && (position.X > (334+250) - playerWidth && position.X < 472 + 250 + 46) && lastPos.Y <= 250 - playerHeight/2)
+            {
+                speed.Y = 0;
+                distanceTraveled.Y = 0;
+                OnPlatform = true;
+            }
+
             position += distanceTraveled;
             if (GameOver) Direction = Direction.Death;
             bounds.X = position.X;

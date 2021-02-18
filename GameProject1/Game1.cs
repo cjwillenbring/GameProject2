@@ -129,6 +129,7 @@ namespace GameProject1
             countdownTimer -= t;
             if (gameOverTimer > 0) gameOverTimer -= t;
             else if (gameOverTimer < 0) Reset();
+            if (countdownTimer < 0) Reset();
 
             // TODO: Add your update logic here
             player.Update(gameTime, GraphicsDevice.Viewport.Width, platforms);

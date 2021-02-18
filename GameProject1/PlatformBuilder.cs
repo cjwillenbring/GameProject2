@@ -19,6 +19,17 @@ namespace GameProject1
             platformList.Add(new PlatformSprite(new Vector2(426, 300)));
             platformList.Add(new PlatformSprite(new Vector2(472, 300)));
 
+            // Left Platform
+            platformList.Add(new PlatformSprite(new Vector2(334 - 275, 250)));
+            platformList.Add(new PlatformSprite(new Vector2(380 - 275, 250)));
+            platformList.Add(new PlatformSprite(new Vector2(426 - 275, 250)));
+            platformList.Add(new PlatformSprite(new Vector2(472 - 275, 250)));
+
+            // Right Platform
+            platformList.Add(new PlatformSprite(new Vector2(334 + 250, 250)));
+            platformList.Add(new PlatformSprite(new Vector2(380 + 250, 250)));
+            platformList.Add(new PlatformSprite(new Vector2(426 + 250, 250)));
+            platformList.Add(new PlatformSprite(new Vector2(472 + 250, 250)));
         }
     }
 }
