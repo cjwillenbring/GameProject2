@@ -7,10 +7,10 @@ namespace GameProject1.Collisions
     /// <summary>
     /// Holds the logic for the bounding rectangle
     /// </summary>
-    public struct BoundingRectangle
+    public struct BoundingRectangle : ICollision
     {
-        public float X;
-        public float Y;
+        public float X { get; set; }
+        public float Y { get; set; }
         public float Width;
         public float Height;
 

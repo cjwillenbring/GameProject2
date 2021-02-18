@@ -7,10 +7,10 @@ namespace GameProject1.Collisions
     /// <summary>
     /// Holds the logic for a bounding circle
     /// </summary>
-    public struct BoundingCircle
+    public struct BoundingCircle : ICollision
     {
-        public float X;
-        public float Y;
+        public float X { get; set; }
+        public float Y { get; set; }
         public float Radius;
 
         /// <summary>

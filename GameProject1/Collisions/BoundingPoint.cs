@@ -7,10 +7,10 @@ namespace GameProject1.Collisions
     /// <summary>
     /// Holds the logic for the bounding point
     /// </summary>
-    public struct BoundingPoint
+    public struct BoundingPoint : ICollision
     {
-        public float X;
-        public float Y;
+        public float X { get; set; }
+        public float Y { get; set; }
 
         /// <summary>
         /// Constructs a BoundingPoint with the provided coordinates

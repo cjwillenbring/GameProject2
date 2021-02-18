@@ -76,9 +76,7 @@ namespace GameProject1.Collisions
         /// <returns>true for collision, false otherwise</returns>
         public static bool Collides(BoundingRectangle r, BoundingCircle c)
         {
-            BoundingPoint p;
-            p.X = MathHelper.Clamp(c.X, r.X, r.X + r.Width);
-            p.Y = MathHelper.Clamp(c.Y, r.Y, r.Y + r.Height);
+            BoundingPoint p = new BoundingPoint(MathHelper.Clamp(c.X, r.X, r.X + r.Width), MathHelper.Clamp(c.Y, r.Y, r.Y + r.Height));
             return Collides(c, p);
         }
     }

@@ -50,7 +50,7 @@ namespace GameProject1
             waveHeats = 0;
             lives = 3;
             enemyTotal = 0;
-            for (int i = 0; i < 10; i++) enemies.Add(new Bomb(wave));
+            for (int i = 0; i < 10; i++) enemies.Add(new Bomb());
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace GameProject1
             waveStart = 0;
             waveHeats = 0;
             lives = 3;
-            for (int i = 0; i < 10; i++) enemies.Add(new Bomb(wave));
+            for (int i = 0; i < 10; i++) enemies.Add(new Bomb());
             random = new Random();
 
             base.Initialize();
@@ -101,7 +101,7 @@ namespace GameProject1
             waveTimer += gameTime.ElapsedGameTime.TotalSeconds;
             if(waveTimer - waveStart > random.Next(3,5)*(waveHeats+1) && waveHeats < wave)
             {
-                for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Bomb(wave));
+                for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Bomb());
                 waveHeats++;
             }
 
@@ -143,7 +143,7 @@ namespace GameProject1
                 waveStart = gameTime.TotalGameTime.TotalSeconds;
                 waveTimer = waveStart;
                 waveHeats = 0;
-                for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Bomb(wave));
+                for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Bomb());
             }
 
             if(lives < 1)
