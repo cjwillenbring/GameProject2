@@ -80,6 +80,11 @@ namespace GameProject1
             texture = content.Load<Texture2D>("player");
         }
 
+        private bool IsInAir()
+        {
+            return position.Y < 480 - 48;
+        }
+
         /// <summary>
         /// Updates the sprite's position based on user input
         /// </summary>
@@ -97,13 +102,13 @@ namespace GameProject1
             // Apply keyboard movement
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
             {
-                Direction = Direction.Lateral;
+                if(!IsInAir()) Direction = Direction.Lateral;
                 flipped = false;
                 position += -unitX * speed * t;
             }
             if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
             {
-                Direction = Direction.Lateral;
+                if (!IsInAir()) Direction = Direction.Lateral;
                 position += unitX * speed * t;
                 flipped = true;
             }
@@ -113,20 +118,23 @@ namespace GameProject1
             if (position.X > screenWidth) position.X = 1;
             else if (position.X < 0) position.X = (float)(screenWidth - (playerWidth + 1));
 
-            float jumpAcceleration = 1000;
-            float downwardAcceleration = -100;
-            Vector2 prevSpeed = speed;
-
-            if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W))
+            float gravity = 500;
+            if(!IsInAir())
             {
-                Direction = Direction.Jump;
-                speed += jumpAcceleration* t * -unitY;
+                speed.Y = 0;
             } else
             {
-                speed += (downwardAcceleration) * t * unitY;
+                speed.Y += gravity * t;
             }
+
+            if ((keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) && !IsInAir())
+            {
+                speed.Y += -20000 * t;
+            } 
             position += unitY * speed * t;
-            speed = prevSpeed;
+
+            if (IsInAir() && speed.Y > 0) Direction = Direction.Fall;
+            else if (IsInAir() && speed.Y <= 0) Direction = Direction.Jump;
 
             if (position.Y > 480 - playerHeight)
             {
