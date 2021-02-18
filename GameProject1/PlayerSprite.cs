@@ -32,9 +32,14 @@ namespace GameProject1
         private bool flipped;
 
         /// <summary>
+        /// Holds the player's speed
+        /// </summary>
+        private Vector2 speed = new Vector2(150,150);
+
+        /// <summary>
         /// Current position of the player
         /// </summary>
-        private Vector2 position = new Vector2(300, 460);
+        private Vector2 position = new Vector2(300, 380);
 
         private BoundingRectangle bounds = new BoundingRectangle(300, 460, 38, 48);
 
@@ -63,42 +68,45 @@ namespace GameProject1
         /// <param name="gameTime">The GameTime</param>
         public void Update(GameTime gameTime, int screenWidth)
         {
+            float playerWidth = 40;
+            float playerHeight = 48;
+            float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Vector2 unitY = Vector2.UnitY;
+            Vector2 unitX = Vector2.UnitX;
+
             keyboardState = Keyboard.GetState();
             // Add animation logic here
             // Apply keyboard movement
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
             {
                 flipped = false;
-                position += new Vector2(-1, 0) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                position += -unitX * speed * t;
             }
             if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
             {
-                position += new Vector2(1, 0) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                position += unitX * speed * t;
                 flipped = true;
             }
-            if (position.X - (64 * .35) > screenWidth)
-            {
-                position.X = 1;
-            }
-            else if (position.X < 0)
-            {
-                position.X = (float)(screenWidth - ((64 * .35) + 1));
-            }
+
+            // Allow player to clip through the wall
+            if (position.X > screenWidth) position.X = 1;
+            else if (position.X < 0) position.X = (float)(screenWidth - (playerWidth + 1));
+
             if (keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.S))
             {
-                position += new Vector2(0, 1) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                position += unitY * speed * t;
             }
             if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W))
             {
-                position += new Vector2(0, -1) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                position += -unitY * speed * t;
             }
-            if (position.Y > 480 - (64 * .35))
+            if (position.Y > 480 - playerHeight)
             {
-                position.Y = (float)(480 - (64 * .35)) + 1;
+                position.Y = (float)(480 - playerHeight) + 1;
             }
-            else if (position.Y < 0 + (64 * .35))
+            else if (position.Y < 0 + playerHeight)
             {
-                position.Y = (float)(64 * .35) + 1;
+                position.Y = (float)playerHeight + 1;
             }
             bounds.X = position.X;
             bounds.Y = position.Y;

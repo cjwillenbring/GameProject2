@@ -22,6 +22,7 @@ namespace GameProject1
 
         public Bomb() : base((float)2.5)
         {
+            speed = new Vector2(rand.Next(-20, 20), rand.Next(30, 50));
             bounds = new BoundingCircle((int)position.X, (int)position.Y, (int)(7 * scalar.X));
         }
 

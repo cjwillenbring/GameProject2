@@ -19,6 +19,7 @@ namespace GameProject1
 
         public Coin() : base(2)
         {
+            speed = new Vector2(0, rand.Next(30, 50));
             bounds = new BoundingCircle((int) position.X, (int) position.Y, (int)(7 * scalar.X));
         }
 
