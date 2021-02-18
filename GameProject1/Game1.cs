@@ -16,7 +16,7 @@ namespace GameProject1
 
         private SlimeGhostSprite slimeGhost;
         private Texture2D atlas;
-        private List<Enemy> enemies;
+        private List<Bomb> enemies;
         private SpriteFont bangers;
         private int wave;
         private int enemyTotal;
@@ -43,14 +43,14 @@ namespace GameProject1
 
         private void Reset()
         {
-            enemies = new List<Enemy>() { };
+            enemies = new List<Bomb>() { };
             wave = 1;
             waveTimer = 0;
             waveStart = 0;
             waveHeats = 0;
             lives = 3;
             enemyTotal = 0;
-            for (int i = 0; i < 10; i++) enemies.Add(new Enemy(wave));
+            for (int i = 0; i < 10; i++) enemies.Add(new Bomb(wave));
         }
 
         /// <summary>
@@ -60,14 +60,14 @@ namespace GameProject1
         {
             // TODO: Add your initialization logic here
             slimeGhost = new SlimeGhostSprite();
-            Enemy.RegisterViewportWidth(GraphicsDevice.Viewport.Width);
-            enemies = new List<Enemy>() {};
+            Bomb.RegisterViewportWidth(GraphicsDevice.Viewport.Width);
+            enemies = new List<Bomb>() {};
             wave = 1;
             waveTimer = 0;
             waveStart = 0;
             waveHeats = 0;
             lives = 3;
-            for (int i = 0; i < 10; i++) enemies.Add(new Enemy(wave));
+            for (int i = 0; i < 10; i++) enemies.Add(new Bomb(wave));
             random = new Random();
 
             base.Initialize();
@@ -85,7 +85,7 @@ namespace GameProject1
             atlas = Content.Load<Texture2D>("colored_packed");
             bangers = Content.Load<SpriteFont>("bangers");
             ball = Content.Load<Texture2D>("basketball");
-            background_texture = Content.Load<Texture2D>("space");
+            background_texture = Content.Load<Texture2D>("ground");
 
         }
 
@@ -101,13 +101,13 @@ namespace GameProject1
             waveTimer += gameTime.ElapsedGameTime.TotalSeconds;
             if(waveTimer - waveStart > random.Next(3,5)*(waveHeats+1) && waveHeats < wave)
             {
-                for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Enemy(wave));
+                for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Bomb(wave));
                 waveHeats++;
             }
 
             // TODO: Add your update logic here
             slimeGhost.Update(gameTime, GraphicsDevice.Viewport.Width);
-            List<Enemy> toRemove = new List<Enemy>();
+            List<Bomb> toRemove = new List<Bomb>();
             foreach (var enemy in enemies)
             {
                 enemy.Update(gameTime);
@@ -143,7 +143,7 @@ namespace GameProject1
                 waveStart = gameTime.TotalGameTime.TotalSeconds;
                 waveTimer = waveStart;
                 waveHeats = 0;
-                for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Enemy(wave));
+                for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Bomb(wave));
             }
 
             if(lives < 1)

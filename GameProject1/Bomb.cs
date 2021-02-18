@@ -9,7 +9,7 @@ using System;
 
 namespace GameProject1
 {
-    public class Enemy
+    public class Bomb
     {
         /// <summary>
         /// Holds the viewportWidth of the screen
@@ -53,7 +53,7 @@ namespace GameProject1
 
         public bool HasCollided { get; set; }
 
-        public Enemy(int waveSpeedMultiplier)
+        public Bomb(int waveSpeedMultiplier)
         {
             position = new Vector2((float)rand.NextDouble() * viewportWidth, 0);
             speed = rand.Next(40, 70*waveSpeedMultiplier);
