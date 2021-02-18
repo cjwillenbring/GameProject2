@@ -79,29 +79,5 @@ namespace GameProject1.Collisions
             BoundingPoint p = new BoundingPoint(MathHelper.Clamp(c.X, r.X, r.X + r.Width), MathHelper.Clamp(c.Y, r.Y, r.Y + r.Height));
             return Collides(c, p);
         }
-
-        /// <summary>
-        /// Calculates the x overlap between two rectangles
-        /// </summary>
-        /// <param name="r1">The first rectangle</param>
-        /// <param name="r2">The second rectangle</param>
-        /// <returns>The x overlap</returns>
-        public static float CalculateXOverlap(BoundingRectangle r1, BoundingRectangle r2)
-        {
-
-            return 0;
-        }
-
-        /// <summary>
-        /// Calculates the y overlap between two rectangles
-        /// </summary>
-        /// <param name="r1">The first rectangle</param>
-        /// <param name="r2">The second rectangle</param>
-        /// <returns>The x overlap</returns>
-        public static float CalculateYOverlap(BoundingRectangle r1, BoundingRectangle r2)
-        {
-
-            return 0;
-        }
     }
 }

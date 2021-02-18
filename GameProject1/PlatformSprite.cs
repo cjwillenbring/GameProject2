@@ -20,7 +20,7 @@ namespace GameProject1
         /// The bounding box for the platform sprite
         /// </summary>
         private BoundingRectangle bounds;
-        public BoundingRectangle Bounds { get; }
+        public BoundingRectangle Bounds { get => bounds; }
         
         /// <summary>
         /// holds the scale for the platforms
@@ -50,7 +50,7 @@ namespace GameProject1
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D atlas)
         {
             // Origin is calculated using the original size
-            spriteBatch.Draw(atlas, position, atlas_location, Color.Black, 0, new Vector2(0, 0), scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(atlas, position, atlas_location, Color.SaddleBrown, 0, new Vector2(0, 0), scale, SpriteEffects.None, 0);
         }
     }
 }

@@ -87,6 +87,17 @@ namespace GameProject1
         private const int upperBound = 0;
 
         /// <summary>
+        /// Whether or not the player is on a platform
+        /// </summary>
+        private bool OnPlatform = false;
+
+        /// <summary>
+        /// Holds the state of the last position
+        /// </summary>
+        private Vector2 lastPos;
+
+
+        /// <summary>
         /// Loads the sprite texture using the provided ContentManager
         /// </summary>
         /// <param name="content">The ContentManager to load with</param>
@@ -97,21 +108,22 @@ namespace GameProject1
 
         private bool IsInAir()
         {
-            return position.Y < lowerBound - 48;
+            return position.Y < lowerBound - 48 || OnPlatform;
         }
 
         /// <summary>
         /// Updates the sprite's position based on user input
         /// </summary>
         /// <param name="gameTime">The GameTime</param>
-        public void Update(GameTime gameTime, int screenWidth)
+        public void Update(GameTime gameTime, int screenWidth, List<PlatformSprite> platforms)
         {
+            lastPos = position;
             float playerWidth = 40;
             float playerHeight = 48;
             float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Vector2 unitY = Vector2.UnitY;
             Vector2 unitX = Vector2.UnitX;
-
+            Vector2 distanceTraveled = new Vector2(0, 0);
             keyboardState = Keyboard.GetState();
 
             // Handle keyboard left click
@@ -119,13 +131,13 @@ namespace GameProject1
             {
                 if(!IsInAir()) Direction = Direction.Lateral;
                 flipped = false;
-                position += -unitX * speed * t;
+                distanceTraveled += -unitX * speed * t;
             }
             // Handle keyboard right click
             if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
             {
                 if (!IsInAir()) Direction = Direction.Lateral;
-                position += unitX * speed * t;
+                distanceTraveled += unitX * speed * t;
                 flipped = true;
             }
             // Set direction to idle if player is not moving
@@ -144,8 +156,8 @@ namespace GameProject1
             if ((keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) && !IsInAir())
             {
                 speed.Y += -30000 * t;
-            } 
-            position += unitY * speed * t;
+            }
+            distanceTraveled += unitY * speed * t;
 
             // Update direction based on speed if player is in the air
             if (IsInAir() && speed.Y > 0) Direction = Direction.Fall;
@@ -161,22 +173,21 @@ namespace GameProject1
                 position.Y = (float)playerHeight + 1;
             }
 
-            if (GameOver) Direction = Direction.Death;
-            bounds.X = position.X;
-            bounds.Y = position.Y;
-        }
-
-        public void HandleCollisions(List<PlatformSprite> platforms)
-        {
-            float overlapX = 0;
-            float overlapY = 0;
-            foreach(var p in platforms)
+            OnPlatform = false;
+            // Handle platform logic
+            foreach (var p in platforms)
             {
-                if(p.Bounds.CollidesWith(bounds))
+                if (p.Bounds.CollidesWith(bounds))
                 {
+                    if (lastPos.Y < 300 - 40) 
+                        OnPlatform = true;
 
                 }
             }
+            position += distanceTraveled;
+            if (GameOver) Direction = Direction.Death;
+            bounds.X = position.X;
+            bounds.Y = position.Y;
         }
 
         /// <summary>

@@ -131,7 +131,7 @@ namespace GameProject1
             else if (gameOverTimer < 0) Reset();
 
             // TODO: Add your update logic here
-            player.Update(gameTime, GraphicsDevice.Viewport.Width);
+            player.Update(gameTime, GraphicsDevice.Viewport.Width, platforms);
 
             // Move through list of falling objects and get which ones have passed the bottom of the screen
             List<FallingItem> toRemove = new List<FallingItem>();
