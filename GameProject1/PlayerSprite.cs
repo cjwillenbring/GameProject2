@@ -98,44 +98,45 @@ namespace GameProject1
             Vector2 unitX = Vector2.UnitX;
 
             keyboardState = Keyboard.GetState();
-            // Add animation logic here
-            // Apply keyboard movement
+
+            // Handle keyboard left click
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
             {
                 if(!IsInAir()) Direction = Direction.Lateral;
                 flipped = false;
                 position += -unitX * speed * t;
             }
+            // Handle keyboard right click
             if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
             {
                 if (!IsInAir()) Direction = Direction.Lateral;
                 position += unitX * speed * t;
                 flipped = true;
             }
+            // Set direction to idle if player is not moving
             if (!(keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A)) && !((keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D)))) Direction = Direction.Idle;
 
             // Allow player to clip through the wall
             if (position.X > screenWidth) position.X = 1;
             else if (position.X < 0) position.X = (float)(screenWidth - (playerWidth + 1));
 
-            float gravity = 500;
-            if(!IsInAir())
-            {
-                speed.Y = 0;
-            } else
-            {
-                speed.Y += gravity * t;
-            }
+            // Handle Gravity
+            float gravity = 1000;
+            if(!IsInAir()) speed.Y = 0;
+            else speed.Y += gravity * t;
 
+            // Apply instantaneous acceleration impulse if on ground and up key is pressed
             if ((keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) && !IsInAir())
             {
-                speed.Y += -20000 * t;
+                speed.Y += -30000 * t;
             } 
             position += unitY * speed * t;
 
+            // Update direction based on speed if player is in the air
             if (IsInAir() && speed.Y > 0) Direction = Direction.Fall;
             else if (IsInAir() && speed.Y <= 0) Direction = Direction.Jump;
 
+            // Make sure player stays in bounds
             if (position.Y > 480 - playerHeight)
             {
                 position.Y = (float)(480 - playerHeight) + 1;
