@@ -36,6 +36,7 @@ namespace GameProject1
         private int best;
         private int currentScore;
         private double countdownTimer;
+        private double gameOverTimer;
 
         // Misc.
         private Random random;
@@ -50,11 +51,16 @@ namespace GameProject1
             IsMouseVisible = true;
         }
 
+        /// <summary>
+        /// Reset the game
+        /// </summary>
         private void Reset()
         {
             countdownTimer = 60;
             currentScore = 0;
             fallingItems = new List<FallingItem>() { };
+            gameOverTimer = 0;
+            player.GameOver = false;
         }
 
         /// <summary>
@@ -68,6 +74,7 @@ namespace GameProject1
             // Add countdown timer and reset score
             currentScore = 0;
             countdownTimer = 60;
+            gameOverTimer = 0;
 
             // register the viewport width with the falling items class
             FallingItem.RegisterViewportWidth(GraphicsDevice.Viewport.Width);
@@ -118,7 +125,10 @@ namespace GameProject1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            countdownTimer -= gameTime.ElapsedGameTime.TotalSeconds;
+            double t = gameTime.ElapsedGameTime.TotalSeconds;
+            countdownTimer -= t;
+            if (gameOverTimer > 0) gameOverTimer -= t;
+            else if (gameOverTimer < 0) Reset();
 
             // TODO: Add your update logic here
             player.Update(gameTime, GraphicsDevice.Viewport.Width);
@@ -131,14 +141,9 @@ namespace GameProject1
                 if (fallingItem.Position.Y > GraphicsDevice.Viewport.Height)
                 {
                     toRemove.Add(fallingItem);
-                    currentScore += 1;
                 }
                 best = Math.Max(best, currentScore);
             }
-
-            // Remove the items that have clipped through the bottom of the game
-            foreach (var item in toRemove)
-                fallingItems.Remove(item);
 
             // Set the player color to be white
             player.Color = Color.White;
@@ -149,10 +154,25 @@ namespace GameProject1
                 if(item.Bounds.CollidesWith(player.Bounds))
                 {
                     player.Color = Color.Red;
-                    
+                    item.HasCollided = true;
+                    toRemove.Add(item);
                     // Add score logic here
+                    if (item is Coin) currentScore++;
+                    else if(item is Bomb)
+                    {
+                        currentScore -= 5;
+                        if (currentScore < 0 && gameOverTimer == 0)
+                        {
+                            gameOverTimer = 1.2;
+                            player.GameOver = true;
+                        }
+                    }
                 }
             }
+
+            // Remove the items that have clipped through the bottom of the game
+            foreach (var item in toRemove)
+                fallingItems.Remove(item);
 
             base.Update(gameTime);
         }

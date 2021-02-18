@@ -13,7 +13,12 @@ namespace GameProject1
     {
         public static void GeneratePlatforms(List<PlatformSprite> platformList)
         {
-            platformList.Add(new PlatformSprite(new Vector2(300, 100)));
+            // Middle Platform
+            platformList.Add(new PlatformSprite(new Vector2(334, 300)));
+            platformList.Add(new PlatformSprite(new Vector2(380, 300)));
+            platformList.Add(new PlatformSprite(new Vector2(426, 300)));
+            platformList.Add(new PlatformSprite(new Vector2(472, 300)));
+
         }
     }
 }

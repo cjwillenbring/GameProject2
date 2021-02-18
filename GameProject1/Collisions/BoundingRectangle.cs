@@ -58,5 +58,25 @@ namespace GameProject1.Collisions
         {
             return CollisionHelper.Collides(r, this);
         }
+
+        /// <summary>
+        /// Calculates the X overlap between the rectangle and another
+        /// </summary>
+        /// <param name="r">The other rectangle</param>
+        /// <returns>A float representing the pixel overlap</returns>
+        public float CalculateXOverlap(BoundingRectangle r)
+        {
+            return CollisionHelper.CalculateXOverlap(r, this);
+        }
+
+        /// <summary>
+        /// Calculates the X overlap between the rectangle and another
+        /// </summary>
+        /// <param name="r">The other rectangle</param>
+        /// <returns>A float representing the pixel overlap</returns>
+        public float CalculateYOverlap(BoundingRectangle r)
+        {
+            return CollisionHelper.CalculateYOverlap(r, this);
+        }
     }
 }

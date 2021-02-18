@@ -21,6 +21,11 @@ namespace GameProject1
         /// </summary>
         private BoundingRectangle bounds;
         public BoundingRectangle Bounds { get; }
+        
+        /// <summary>
+        /// holds the scale for the platforms
+        /// </summary>
+        private static int scale = 3;
 
         /// <summary>
         /// The location of the platform on the sprite atlas
@@ -34,7 +39,7 @@ namespace GameProject1
         public PlatformSprite(Vector2 pos)
         {
             position = pos;
-            bounds = new BoundingRectangle(position.X, position.Y, 16, 16);
+            bounds = new BoundingRectangle(position.X, position.Y, 16*scale, 16*scale);
         }
 
         /// <summary>
@@ -45,7 +50,7 @@ namespace GameProject1
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D atlas)
         {
             // Origin is calculated using the original size
-            spriteBatch.Draw(atlas, position, atlas_location, Color.Black, 0, new Vector2(0, 0), 3, SpriteEffects.None, 0);
+            spriteBatch.Draw(atlas, position, atlas_location, Color.Black, 0, new Vector2(0, 0), scale, SpriteEffects.None, 0);
         }
     }
 }

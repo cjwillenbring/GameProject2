@@ -72,6 +72,11 @@ namespace GameProject1
         public Direction Direction { get; set; }
 
         /// <summary>
+        /// Sets whether or not game is over or not
+        /// </summary>
+        public bool GameOver { get; set; }
+
+        /// <summary>
         /// The lower bound for the player
         /// </summary>
         private const int lowerBound = 420;
@@ -155,8 +160,23 @@ namespace GameProject1
             {
                 position.Y = (float)playerHeight + 1;
             }
+
+            if (GameOver) Direction = Direction.Death;
             bounds.X = position.X;
             bounds.Y = position.Y;
+        }
+
+        public void HandleCollisions(List<PlatformSprite> platforms)
+        {
+            float overlapX = 0;
+            float overlapY = 0;
+            foreach(var p in platforms)
+            {
+                if(p.Bounds.CollidesWith(bounds))
+                {
+
+                }
+            }
         }
 
         /// <summary>
