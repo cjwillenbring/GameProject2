@@ -11,24 +11,32 @@ namespace GameProject1
     /// </summary>
     public class Game1 : Game
     {
+        // Graphics device manager and spritebatch properties
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
+        // Player Sprites
         private PlayerSprite player;
+        private List<FallingItem> fallingItems;
+
+        // Platform Sprite
+        private List<PlatformSprite> platforms;
+
+        // Textures
         private Texture2D humble_atlas;
-        private List<Bomb> enemies;
-        private SpriteFont bangers;
-        private int wave;
-        private int enemyTotal;
         private Texture2D ball;
         private Texture2D background_texture;
-        private int lives;
+        private Texture2D coin;
+
+        // Fonts
+        private SpriteFont bangers;
+
+        // Game properties/mechanics
         private int best;
+        private int currentScore;
+        private double countdownTimer;
 
-        private double waveStart;
-        private double waveTimer;
-        private int waveHeats;
-
+        // Misc.
         private Random random;
 
         /// <summary>
@@ -43,14 +51,9 @@ namespace GameProject1
 
         private void Reset()
         {
-            enemies = new List<Bomb>() { };
-            wave = 1;
-            waveTimer = 0;
-            waveStart = 0;
-            waveHeats = 0;
-            lives = 3;
-            enemyTotal = 0;
-            for (int i = 0; i < 10; i++) enemies.Add(new Bomb());
+            countdownTimer = 60;
+            currentScore = 0;
+            fallingItems = new List<FallingItem>() { };
         }
 
         /// <summary>
@@ -58,16 +61,21 @@ namespace GameProject1
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            // add in player sprite
             player = new PlayerSprite();
-            Bomb.RegisterViewportWidth(GraphicsDevice.Viewport.Width);
-            enemies = new List<Bomb>() {};
-            wave = 1;
-            waveTimer = 0;
-            waveStart = 0;
-            waveHeats = 0;
-            lives = 3;
-            for (int i = 0; i < 10; i++) enemies.Add(new Bomb());
+
+            // Add countdown timer and reset score
+            currentScore = 0;
+            countdownTimer = 60;
+
+            // register the viewport width with the falling items class
+            FallingItem.RegisterViewportWidth(GraphicsDevice.Viewport.Width);
+
+            // initialize the falling items list and add some items to it
+            fallingItems = new List<FallingItem>() {};
+            for (int i = 0; i < 10; i++) fallingItems.Add(new Bomb());
+
+            // initialize the random object
             random = new Random();
 
             base.Initialize();
@@ -78,15 +86,21 @@ namespace GameProject1
         /// </summary>
         protected override void LoadContent()
         {
+            // Create a new sprite batch for the graphics device
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            // Loads player content, textures, etc
             player.LoadContent(Content);
+
+            // Load textures
             humble_atlas = Content.Load<Texture2D>("humble-item-pack");
-            bangers = Content.Load<SpriteFont>("bangers");
             ball = Content.Load<Texture2D>("basketball");
             background_texture = Content.Load<Texture2D>("ground");
+            coin = Content.Load<Texture2D>("coin-sparkle");
 
+            // Load fonts
+            bangers = Content.Load<SpriteFont>("bangers");
         }
 
         /// <summary>d
@@ -98,57 +112,40 @@ namespace GameProject1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            waveTimer += gameTime.ElapsedGameTime.TotalSeconds;
-            if(waveTimer - waveStart > random.Next(3,5)*(waveHeats+1) && waveHeats < wave)
-            {
-                for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Bomb());
-                waveHeats++;
-            }
+            countdownTimer -= gameTime.ElapsedGameTime.TotalSeconds;
 
             // TODO: Add your update logic here
             player.Update(gameTime, GraphicsDevice.Viewport.Width);
-            List<Bomb> toRemove = new List<Bomb>();
-            foreach (var enemy in enemies)
+
+            // Move through list of falling objects and get which ones have passed the bottom of the screen
+            List<FallingItem> toRemove = new List<FallingItem>();
+            foreach (var fallingItem in fallingItems)
             {
-                enemy.Update(gameTime);
-                if (enemy.Position.Y > GraphicsDevice.Viewport.Height)
+                fallingItem.Update(gameTime);
+                if (fallingItem.Position.Y > GraphicsDevice.Viewport.Height)
                 {
-                    toRemove.Add(enemy);
+                    toRemove.Add(fallingItem);
+                    currentScore += 1;
                 }
-            }
-            foreach (var e in toRemove)
-            {
-                enemyTotal += 1;
-                best = Math.Max(best, enemyTotal);
-                enemies.Remove(e);
+                best = Math.Max(best, currentScore);
             }
 
+            // Remove the items that have clipped through the bottom of the game
+            foreach (var item in toRemove)
+                fallingItems.Remove(item);
+
+            // Set the player color to be white
             player.Color = Color.White;
-            foreach(var enemy in enemies)
+
+            // Loop through falling items and look for collisions
+            foreach(var item in fallingItems)
             {
-                if(enemy.Bounds.CollidesWith(player.Bounds))
+                if(item.Bounds.CollidesWith(player.Bounds))
                 {
                     player.Color = Color.Red;
-                    if(!enemy.HasCollided)
-                    {
-                        enemy.HasCollided = true;
-                        lives -= 1;
-                    }
+                    
+                    // Add score logic here
                 }
-            }
-
-            if (enemies.Count == 0 && waveHeats == wave)
-            {
-                wave += 1;
-                waveStart = gameTime.TotalGameTime.TotalSeconds;
-                waveTimer = waveStart;
-                waveHeats = 0;
-                for (int i = 0; i < random.Next(7, 7 + wave); i++) enemies.Add(new Bomb());
-            }
-
-            if(lives < 1)
-            {
-                Reset();
             }
 
             base.Update(gameTime);
@@ -163,27 +160,32 @@ namespace GameProject1
             GraphicsDevice.Clear(Color.DarkSlateGray);
             // TODO: Add your drawing code here
             spriteBatch.Begin();
+
+            // Draw the background texture first since it should have the lowest z value and be rendered in the back
             spriteBatch.Draw(background_texture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
-            foreach (var enemy in enemies) {
-                enemy.Draw(gameTime, spriteBatch, humble_atlas);
+            foreach (var item in fallingItems) {
+                // think about making atlas more dynamic, but for now handle with if else
+                if(item is Bomb b)
+                    b.Draw(gameTime, spriteBatch, humble_atlas);
+                else if(item is Coin c)
+                    c.Draw(gameTime, spriteBatch, coin);
                 /* Visual Debugging */
                 /*
                 var rect = new Rectangle((int)(enemy.Bounds.X - enemy.Bounds.Radius), (int)(enemy.Bounds.Y - enemy.Bounds.Radius), (int)(2 * enemy.Bounds.Radius), (int)(2 * enemy.Bounds.Radius));
                 spriteBatch.Draw(ball, rect, Color.Red);
                 */
             }
-            /* Visual Debugging */
-            /*
-            var rect2 = new Rectangle((int)(slimeGhost.Bounds.X - slimeGhost.Bounds.Radius), (int)(slimeGhost.Bounds.Y - slimeGhost.Bounds.Radius), (int)(2 * slimeGhost.Bounds.Radius), (int)(2 * slimeGhost.Bounds.Radius));
-            spriteBatch.Draw(ball, rect2, Color.Brown);
-            */
 
             player.Draw(gameTime, spriteBatch);
-            spriteBatch.DrawString(bangers, $"Wave : {wave}", new Vector2(20, 20), Color.Gold);
-            spriteBatch.DrawString(bangers, $"Lives : {lives}", new Vector2(20, 60), Color.Gold);
-            spriteBatch.DrawString(bangers, $"Enemies Dodged : {enemyTotal}", new Vector2(400, 20), Color.Gold);
-            spriteBatch.DrawString(bangers, $"Best : {best}", new Vector2(587, 60), Color.Gold);
+            
+            // Render text, measure widths first to get more precise placement
+            Vector2 widthScore = bangers.MeasureString($"Current Score : {currentScore}");
+            Vector2 widthBest = bangers.MeasureString($"Best : {best}");
+
+            spriteBatch.DrawString(bangers, $"Time Left : {countdownTimer:F}", new Vector2(5, 5), Color.Black);
+            spriteBatch.DrawString(bangers, $"Current Score : {currentScore}", new Vector2(800 - (widthScore.X + 5), 5), Color.Black);
+            spriteBatch.DrawString(bangers, $"Best : {best}", new Vector2(800 - (widthBest.X + 5), 45), Color.Black);
             spriteBatch.End();
 
             base.Draw(gameTime);

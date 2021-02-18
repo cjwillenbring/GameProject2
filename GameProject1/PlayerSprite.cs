@@ -47,7 +47,7 @@ namespace GameProject1
         /// <summary>
         /// Holds the player's speed
         /// </summary>
-        private Vector2 speed = new Vector2(150,150);
+        private Vector2 speed = new Vector2(150, 150);
 
         /// <summary>
         /// Current position of the player
@@ -72,6 +72,16 @@ namespace GameProject1
         public Direction Direction { get; set; }
 
         /// <summary>
+        /// The lower bound for the player
+        /// </summary>
+        private const int lowerBound = 420;
+
+        /// <summary>
+        /// The upper boundary for the player
+        /// </summary>
+        private const int upperBound = 0;
+
+        /// <summary>
         /// Loads the sprite texture using the provided ContentManager
         /// </summary>
         /// <param name="content">The ContentManager to load with</param>
@@ -82,7 +92,7 @@ namespace GameProject1
 
         private bool IsInAir()
         {
-            return position.Y < 480 - 48;
+            return position.Y < lowerBound - 48;
         }
 
         /// <summary>
@@ -137,11 +147,11 @@ namespace GameProject1
             else if (IsInAir() && speed.Y <= 0) Direction = Direction.Jump;
 
             // Make sure player stays in bounds
-            if (position.Y > 480 - playerHeight)
+            if (!IsInAir())
             {
-                position.Y = (float)(480 - playerHeight) + 1;
+                position.Y = (float)(lowerBound - playerHeight) + 1;
             }
-            else if (position.Y < 0 + playerHeight)
+            else if (position.Y < upperBound + playerHeight)
             {
                 position.Y = (float)playerHeight + 1;
             }
