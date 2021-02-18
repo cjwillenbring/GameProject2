@@ -38,7 +38,7 @@ namespace GameProject1
         /// <summary>
         /// The speed of the object falling
         /// </summary>
-        protected int speed;
+        protected Vector2 speed;
 
         /// <summary>
         /// The Bounding Shape
@@ -57,7 +57,7 @@ namespace GameProject1
             float startingXPos = (float)rand.NextDouble();
             position = new Vector2(startingXPos* viewportWidth, 0);
 
-            speed = rand.Next(40, 70);
+            speed = new Vector2(rand.Next(-40,40), rand.Next(30, 50));
 
             // deal with scaling
             scalar = new Vector2(scale, scale);

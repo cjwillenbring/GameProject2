@@ -11,6 +11,11 @@ namespace GameProject1
     public class Bomb : FallingItem
     {
         /// <summary>
+        /// Holds the acceleration for the bomb object
+        /// </summary>
+        protected const int Y_AXIS_ACCELERATION = 10;
+
+        /// <summary>
         /// Stores the location of the enemy object on the sprite atlas
         /// </summary>
         private static Rectangle atlas_location = new Rectangle(0, 145, 16, 16);
@@ -22,7 +27,9 @@ namespace GameProject1
 
         public override void Update(GameTime gameTime)
         {
-            position += new Vector2(0, 1) * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            speed += t * Y_AXIS_ACCELERATION * Vector2.UnitY;
+            position += speed * t;
             bounds.X = position.X;
             bounds.Y = position.Y;
         }
