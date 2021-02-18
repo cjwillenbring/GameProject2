@@ -14,8 +14,8 @@ namespace GameProject1
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
 
-        private SlimeGhostSprite slimeGhost;
-        private Texture2D atlas;
+        private PlayerSprite player;
+        private Texture2D humble_atlas;
         private List<Bomb> enemies;
         private SpriteFont bangers;
         private int wave;
@@ -59,7 +59,7 @@ namespace GameProject1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            slimeGhost = new SlimeGhostSprite();
+            player = new PlayerSprite();
             Bomb.RegisterViewportWidth(GraphicsDevice.Viewport.Width);
             enemies = new List<Bomb>() {};
             wave = 1;
@@ -81,8 +81,8 @@ namespace GameProject1
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            slimeGhost.LoadContent(Content);
-            atlas = Content.Load<Texture2D>("humble-item-pack");
+            player.LoadContent(Content);
+            humble_atlas = Content.Load<Texture2D>("humble-item-pack");
             bangers = Content.Load<SpriteFont>("bangers");
             ball = Content.Load<Texture2D>("basketball");
             background_texture = Content.Load<Texture2D>("ground");
@@ -106,7 +106,7 @@ namespace GameProject1
             }
 
             // TODO: Add your update logic here
-            slimeGhost.Update(gameTime, GraphicsDevice.Viewport.Width);
+            player.Update(gameTime, GraphicsDevice.Viewport.Width);
             List<Bomb> toRemove = new List<Bomb>();
             foreach (var enemy in enemies)
             {
@@ -123,12 +123,12 @@ namespace GameProject1
                 enemies.Remove(e);
             }
 
-            slimeGhost.Color = Color.White;
+            player.Color = Color.White;
             foreach(var enemy in enemies)
             {
-                if(enemy.Bounds.CollidesWith(slimeGhost.Bounds))
+                if(enemy.Bounds.CollidesWith(player.Bounds))
                 {
-                    slimeGhost.Color = Color.Red;
+                    player.Color = Color.Red;
                     if(!enemy.HasCollided)
                     {
                         enemy.HasCollided = true;
@@ -166,7 +166,7 @@ namespace GameProject1
             spriteBatch.Draw(background_texture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
             foreach (var enemy in enemies) {
-                enemy.Draw(gameTime, spriteBatch, atlas);
+                enemy.Draw(gameTime, spriteBatch, humble_atlas);
                 /* Visual Debugging */
                 /*
                 var rect = new Rectangle((int)(enemy.Bounds.X - enemy.Bounds.Radius), (int)(enemy.Bounds.Y - enemy.Bounds.Radius), (int)(2 * enemy.Bounds.Radius), (int)(2 * enemy.Bounds.Radius));
@@ -179,7 +179,7 @@ namespace GameProject1
             spriteBatch.Draw(ball, rect2, Color.Brown);
             */
 
-            slimeGhost.Draw(gameTime, spriteBatch);
+            player.Draw(gameTime, spriteBatch);
             spriteBatch.DrawString(bangers, $"Wave : {wave}", new Vector2(20, 20), Color.Gold);
             spriteBatch.DrawString(bangers, $"Lives : {lives}", new Vector2(20, 60), Color.Gold);
             spriteBatch.DrawString(bangers, $"Enemies Dodged : {enemyTotal}", new Vector2(400, 20), Color.Gold);

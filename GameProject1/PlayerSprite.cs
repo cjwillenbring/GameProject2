@@ -11,23 +11,37 @@ namespace GameProject1
 {
     public class PlayerSprite
     {
-
-        private GamePadState gamePadState;
-
+        /// <summary>
+        /// Keyboard state
+        /// </summary>
         private KeyboardState keyboardState;
 
+        /// <summary>
+        /// Player art/animations texture
+        /// </summary>
         private Texture2D texture;
 
+        /// <summary>
+        /// The location of the currently used frame
+        /// </summary>
+        private static Rectangle atlas_location = new Rectangle(0, 0, 16, 16);
+
+        /// <summary>
+        /// Whether or not the sprite is facing to the left or right
+        /// </summary>
         private bool flipped;
 
-        private Vector2 position = new Vector2(300, 400);
-
-        private BoundingCircle bounds = new BoundingCircle(300, 430, 64 * .35f);
-
-        /// <summary>wddddddddd
-        /// The bounding volume of the sprite
+        /// <summary>
+        /// Current position of the player
         /// </summary>
-        public BoundingCircle Bounds { get => bounds; }
+        private Vector2 position = new Vector2(300, 460);
+
+        private BoundingRectangle bounds = new BoundingRectangle(300, 460, 38, 48);
+
+        /// <summary>
+        /// The bounding volume of the player
+        /// </summary>
+        public BoundingRectangle Bounds { get => bounds; }
 
         /// <summary>
         /// Holds the color of the player
@@ -54,13 +68,13 @@ namespace GameProject1
             // Apply keyboard movement
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.A))
             {
-                flipped = true;
+                flipped = false;
                 position += new Vector2(-1, 0) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
             if (keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.D))
             {
                 position += new Vector2(1, 0) * 150 * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                flipped = false;
+                flipped = true;
             }
             if (position.X - (64 * .35) > screenWidth)
             {
@@ -99,7 +113,7 @@ namespace GameProject1
         {
             SpriteEffects spriteEffects = (flipped) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             // Origin is calculated using the original size
-            spriteBatch.Draw(texture, position, null, Color, 0, new Vector2(64, 64), .35f, spriteEffects, 0);
+            spriteBatch.Draw(texture, position, atlas_location, Color, 0, new Vector2(2, 0), 3, spriteEffects, 0);
         }
     }
 }
