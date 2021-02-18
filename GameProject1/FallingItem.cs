@@ -8,6 +8,9 @@ using GameProject1.Collisions;
 
 namespace GameProject1
 {
+    /// <summary>
+    /// Abstract class to hold falling objects
+    /// </summary>
     public abstract class FallingItem
     {
         /// <summary>
@@ -49,7 +52,7 @@ namespace GameProject1
 
         public bool HasCollided { get; set; }
 
-        public FallingItem(bool shouldScale)
+        public FallingItem(float scale)
         {
             float startingXPos = (float)rand.NextDouble();
             position = new Vector2(startingXPos* viewportWidth, 0);
@@ -57,13 +60,7 @@ namespace GameProject1
             speed = rand.Next(40, 70);
 
             // deal with scaling
-            if (shouldScale)
-            {
-                float rand_scale = (float)rand.NextDouble() * 5;
-                if (rand_scale > .5) scalar = new Vector2(rand_scale, rand_scale);
-                else scalar = new Vector2(1, 1);
-            }
-            else scalar = new Vector2(1, 1);
+            scalar = new Vector2(scale, scale);
 
             // Make sure the bounds are set in the child class
             if (bounds == null) new Exception();

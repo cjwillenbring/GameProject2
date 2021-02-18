@@ -13,9 +13,9 @@ namespace GameProject1
         /// <summary>
         /// Stores the location of the enemy object on the sprite atlas
         /// </summary>
-        private static Rectangle atlas_location = new Rectangle(19 * 16, 9 * 16, 16, 16);
+        private static Rectangle atlas_location = new Rectangle(0, 145, 16, 16);
 
-        public Bomb() : base(false)
+        public Bomb() : base((float)2.5)
         {
             bounds = new BoundingCircle((int)position.X, (int)position.Y, (int)(7 * scalar.X));
         }

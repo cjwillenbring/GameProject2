@@ -15,7 +15,7 @@ namespace GameProject1
         /// </summary>
         private static Rectangle atlas_location = new Rectangle(19 * 16, 9 * 16, 16, 16);
 
-        public Coin() : base(false)
+        public Coin() : base(2)
         {
             bounds = new BoundingCircle((int) position.X, (int) position.Y, (int)(7 * scalar.X));
         }

@@ -9,7 +9,14 @@ namespace GameProject1.Collisions
     /// </summary>
     public struct BoundingPoint : ICollision
     {
+        /// <summary>
+        /// The X position of the Bounding polygon
+        /// </summary>
         public float X { get; set; }
+
+        /// <summary>
+        /// The Y position of the Bounding polygon
+        /// </summary>
         public float Y { get; set; }
 
         /// <summary>

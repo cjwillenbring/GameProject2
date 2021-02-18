@@ -82,7 +82,7 @@ namespace GameProject1
 
             // TODO: use this.Content to load your game content here
             slimeGhost.LoadContent(Content);
-            atlas = Content.Load<Texture2D>("colored_packed");
+            atlas = Content.Load<Texture2D>("humble-item-pack");
             bangers = Content.Load<SpriteFont>("bangers");
             ball = Content.Load<Texture2D>("basketball");
             background_texture = Content.Load<Texture2D>("ground");
