@@ -24,6 +24,7 @@ namespace GameProject1
 
         // Textures
         private Texture2D humble_atlas;
+        private Texture2D colored_pack_atlas;
         private Texture2D ball;
         private Texture2D background_texture;
         private Texture2D coin;
@@ -75,6 +76,10 @@ namespace GameProject1
             fallingItems = new List<FallingItem>() {};
             for (int i = 0; i < 10; i++) fallingItems.Add(new Bomb());
 
+            // initialize platform list and populate with static method
+            platforms = new List<PlatformSprite>();
+            PlatformBuilder.GeneratePlatforms(platforms);
+
             // initialize the random object
             random = new Random();
 
@@ -98,6 +103,7 @@ namespace GameProject1
             ball = Content.Load<Texture2D>("basketball");
             background_texture = Content.Load<Texture2D>("ground");
             coin = Content.Load<Texture2D>("coin-sparkle");
+            colored_pack_atlas = Content.Load<Texture2D>("colored_packed");
 
             // Load fonts
             bangers = Content.Load<SpriteFont>("bangers");
@@ -175,6 +181,11 @@ namespace GameProject1
                 var rect = new Rectangle((int)(enemy.Bounds.X - enemy.Bounds.Radius), (int)(enemy.Bounds.Y - enemy.Bounds.Radius), (int)(2 * enemy.Bounds.Radius), (int)(2 * enemy.Bounds.Radius));
                 spriteBatch.Draw(ball, rect, Color.Red);
                 */
+            }
+
+            foreach(var platform in platforms)
+            {
+                platform.Draw(gameTime, spriteBatch, colored_pack_atlas);
             }
 
             player.Draw(gameTime, spriteBatch);
