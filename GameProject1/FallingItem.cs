@@ -50,6 +50,9 @@ namespace GameProject1
         /// </summary>
         public ICollision Bounds { get => bounds; }
 
+        /// <summary>
+        /// Whether or not this item has been collided with
+        /// </summary>
         public bool HasCollided { get; set; }
 
         public FallingItem(float scale)

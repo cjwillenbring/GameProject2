@@ -13,14 +13,24 @@ namespace GameProject1
         protected const int Y_AXIS_ACCELERATION = 5;
 
         /// <summary>
+        /// Timer holds animation time
+        /// </summary>
+        private double animationTimer;
+
+        /// <summary>
+        /// Holds the current animation frame
+        /// </summary>
+        private short animationFrame;
+
+        /// <summary>
         /// Stores the location of the enemy object on the sprite atlas
         /// </summary>
-        private static Rectangle atlas_location = new Rectangle(0, 0, 16, 16);
+        private static Rectangle atlas_location = new Rectangle(0, 0, 32, 132);
 
         public Coin() : base(2)
         {
             speed = new Vector2(0, rand.Next(30, 50));
-            bounds = new BoundingCircle((int) position.X, (int) position.Y, (int)(7 * scalar.X));
+            bounds = new BoundingRectangle((int) position.X, (int) position.Y, (int) 8, (int) 10);
         }
 
         public override void Update(GameTime gameTime)
@@ -34,7 +44,17 @@ namespace GameProject1
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Texture2D atlas)
         {
-            spriteBatch.Draw(atlas, position, atlas_location, Color.White, 0, new Vector2(8, 10), scalar, SpriteEffects.None, 0);
+            animationTimer += gameTime.ElapsedGameTime.TotalSeconds;
+            // Every 3/10 of a second, advance the animation frame 
+            if (animationTimer > .3)
+            {
+                animationFrame++;
+                if (animationFrame > 3) animationFrame = 0;
+                animationTimer = 0;
+            }
+
+            var sourceRect = new Rectangle(animationFrame * 32, 0, 32, 32);
+            spriteBatch.Draw(atlas, position, sourceRect, Color.White, 0, new Vector2(11, 10), scalar, SpriteEffects.None, 0);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace GameProject1
         // Player Sprites
         private PlayerSprite player;
         private List<FallingItem> fallingItems;
+        private ChestSprite chestSprite;
 
         // Platform Sprite
         private List<PlatformSprite> platforms;
@@ -74,8 +75,9 @@ namespace GameProject1
         /// </summary>
         protected override void Initialize()
         {
-            // add in player sprite
+            // add in player and chest sprites
             player = new PlayerSprite();
+            chestSprite = new ChestSprite();
 
             // Add countdown timer and reset score
             currentScore = 0;
@@ -85,9 +87,8 @@ namespace GameProject1
             // register the viewport width with the falling items class
             FallingItem.RegisterViewportWidth(GraphicsDevice.Viewport.Width);
 
-            // initialize the falling items list and add some items to it
+            // initialize the falling items list
             fallingItems = new List<FallingItem>() {};
-            for (int i = 0; i < 10; i++) fallingItems.Add(new Bomb());
 
             // initialize platform list and populate with static method
             platforms = new List<PlatformSprite>();
@@ -112,6 +113,7 @@ namespace GameProject1
             player.LoadContent(Content);
 
             // Load textures
+            chestSprite.LoadContent(Content);
             humble_atlas = Content.Load<Texture2D>("humble-item-pack");
             ball = Content.Load<Texture2D>("basketball");
             background_texture = Content.Load<Texture2D>("ground");
@@ -171,15 +173,29 @@ namespace GameProject1
                     item.HasCollided = true;
                     toRemove.Add(item);
                     // Add score logic here
-                    if (item is Coin) currentScore++;
-                    else if(item is Bomb)
+                    if (item is Coin)
                     {
-                        currentScore -= 5;
+                        chestSprite.ChestState = ChestState.Open;
+                        currentScore++;
+                        coinPickupSound.Play(.2f, 0, 0);
+                    }
+                    else if (item is Bomb)
+                    {
+                        if(random.NextDouble() > .75)
+                        {
+                            for(int i = 0; i < 3; i++) bombCoinPickupSound.Play(.1f,0,0);
+                            currentScore += 5;
+                        } else
+                        {
+                            explosionSound.Play(.1f, 1, 0);
+                            currentScore -= 5;
+                        }
                         if (currentScore < 0 && gameOverTimer == 0)
                         {
-                            explosionSound.Play();
+                            explosionSound.Play(.3f,0,0);
                             gameOverTimer = 1.2;
                             player.GameOver = true;
+                            foreach (var f in fallingItems) toRemove.Add(f);
                         }
                     }
                 }
@@ -211,11 +227,6 @@ namespace GameProject1
                     b.Draw(gameTime, spriteBatch, humble_atlas);
                 else if(item is Coin c)
                     c.Draw(gameTime, spriteBatch, coin);
-                /* Visual Debugging */
-                /*
-                var rect = new Rectangle((int)(enemy.Bounds.X - enemy.Bounds.Radius), (int)(enemy.Bounds.Y - enemy.Bounds.Radius), (int)(2 * enemy.Bounds.Radius), (int)(2 * enemy.Bounds.Radius));
-                spriteBatch.Draw(ball, rect, Color.Red);
-                */
             }
 
             foreach(var platform in platforms)
@@ -224,7 +235,7 @@ namespace GameProject1
             }
 
             player.Draw(gameTime, spriteBatch);
-            
+            chestSprite.Draw(gameTime, spriteBatch);
             // Render text, measure widths first to get more precise placement
             Vector2 widthScore = bangers.MeasureString($"Current Score : {currentScore}");
             Vector2 widthBest = bangers.MeasureString($"Best : {best}");
