@@ -140,3 +140,9 @@
 /processorParam:TextureFormat=Color
 /build:player.png
 
+#begin Sabae-Sunrise.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Sabae-Sunrise.mp3
+

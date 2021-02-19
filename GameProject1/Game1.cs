@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace GameProject1
 {
@@ -32,6 +33,7 @@ namespace GameProject1
         private Texture2D coin;
 
         // Sound Effects and Music
+        private Song song;
         private SoundEffect coinPickupSound;
         private SoundEffect bombCoinPickupSound;
         private SoundEffect explosionSound;
@@ -121,12 +123,17 @@ namespace GameProject1
             colored_pack_atlas = Content.Load<Texture2D>("colored_packed");
 
             // Load Sound Effects and Music
+            song = Content.Load<Song>("Sabae-Sunrise");
             explosionSound = Content.Load<SoundEffect>("Explosion");
             coinPickupSound = Content.Load<SoundEffect>("Pickup_Coin");
             bombCoinPickupSound = Content.Load<SoundEffect>("Bomb_Coin");
 
             // Load fonts
             bangers = Content.Load<SpriteFont>("bangers");
+
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = .2f;
+            MediaPlayer.Play(song);
         }
 
         /// <summary>d
@@ -184,6 +191,7 @@ namespace GameProject1
                         if(random.NextDouble() > .75)
                         {
                             for(int i = 0; i < 3; i++) bombCoinPickupSound.Play(.1f,0,0);
+                            chestSprite.ChestState = ChestState.Open;
                             currentScore += 5;
                         } else
                         {
@@ -239,9 +247,8 @@ namespace GameProject1
             // Render text, measure widths first to get more precise placement
             Vector2 widthScore = bangers.MeasureString($"Current Score : {currentScore}");
             Vector2 widthBest = bangers.MeasureString($"Best : {best}");
-
             spriteBatch.DrawString(bangers, $"Time Left : {countdownTimer:F}", new Vector2(5, 5), Color.Black);
-            spriteBatch.DrawString(bangers, $"Current Score : {currentScore}", new Vector2(800 - (widthScore.X + 5), 5), Color.Black);
+            spriteBatch.DrawString(bangers, $"Current Score : {Math.Max(currentScore,0)}", new Vector2(800 - (widthScore.X + 5), 5), Color.Black);
             spriteBatch.DrawString(bangers, $"Best : {best}", new Vector2(800 - (widthBest.X + 5), 45), Color.Black);
             spriteBatch.End();
 
