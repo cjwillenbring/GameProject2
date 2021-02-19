@@ -15,7 +15,7 @@ namespace GameProject1
         /// <summary>
         /// Stores the location of the enemy object on the sprite atlas
         /// </summary>
-        private static Rectangle atlas_location = new Rectangle(19 * 16, 9 * 16, 16, 16);
+        private static Rectangle atlas_location = new Rectangle(0, 0, 16, 16);
 
         public Coin() : base(2)
         {

@@ -136,6 +136,8 @@ namespace GameProject1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            if(random.NextDouble() > .975) fallingItems.Add(new Bomb());
+            if(random.NextDouble() > .975) fallingItems.Add(new Coin());
             double t = gameTime.ElapsedGameTime.TotalSeconds;
             countdownTimer -= t;
             if (gameOverTimer > 0) gameOverTimer -= t;
@@ -175,6 +177,7 @@ namespace GameProject1
                         currentScore -= 5;
                         if (currentScore < 0 && gameOverTimer == 0)
                         {
+                            explosionSound.Play();
                             gameOverTimer = 1.2;
                             player.GameOver = true;
                         }

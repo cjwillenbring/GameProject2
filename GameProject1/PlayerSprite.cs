@@ -162,7 +162,7 @@ namespace GameProject1
             if ((keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) && (!IsInAir() || OnPlatform))
             {
                 speed.Y += -30000 * t;
-                jumpSound.Play();
+                jumpSound.Play(.5f, 0, 0);
             }
             distanceTraveled += unitY * speed * t;
 
