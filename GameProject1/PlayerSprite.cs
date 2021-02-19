@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using GameProject1.Collisions;
+using Microsoft.Xna.Framework.Audio;
 
 namespace GameProject1
 {
@@ -95,7 +96,11 @@ namespace GameProject1
         /// Holds the state of the last position
         /// </summary>
         private Vector2 lastPos;
-
+        
+        /// <summary>
+        /// Holds the sound for the jump
+        /// </summary>
+        private SoundEffect jumpSound;
 
         /// <summary>
         /// Loads the sprite texture using the provided ContentManager
@@ -104,6 +109,7 @@ namespace GameProject1
         public void LoadContent(ContentManager content)
         {
             texture = content.Load<Texture2D>("player");
+            jumpSound = content.Load<SoundEffect>("Jump");
         }
 
         private bool IsInAir()
@@ -156,6 +162,7 @@ namespace GameProject1
             if ((keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W)) && (!IsInAir() || OnPlatform))
             {
                 speed.Y += -30000 * t;
+                jumpSound.Play();
             }
             distanceTraveled += unitY * speed * t;
 

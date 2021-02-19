@@ -32,6 +32,12 @@
 /processorParam:TextureFormat=Color
 /build:basketball.png
 
+#begin Bomb_Coin.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Bomb_Coin.wav
+
 #begin chest.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -80,6 +86,12 @@
 /processorParam:TextureFormat=Color
 /build:colored_packed.png
 
+#begin Explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Explosion.wav
+
 #begin ground.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -104,6 +116,18 @@
 /processorParam:TextureFormat=Color
 /build:humble-item-pack.png
 
+#begin Jump.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Jump.wav
+
+#begin Pickup_Coin.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Pickup_Coin.wav
+
 #begin player.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -115,16 +139,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:player.png
-
-#begin slime.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:slime.png
 

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
+using Microsoft.Xna.Framework.Audio;
 
 namespace GameProject1
 {
@@ -28,6 +29,11 @@ namespace GameProject1
         private Texture2D ball;
         private Texture2D background_texture;
         private Texture2D coin;
+
+        // Sound Effects and Music
+        private SoundEffect coinPickupSound;
+        private SoundEffect bombCoinPickupSound;
+        private SoundEffect explosionSound;
 
         // Fonts
         private SpriteFont bangers;
@@ -111,6 +117,11 @@ namespace GameProject1
             background_texture = Content.Load<Texture2D>("ground");
             coin = Content.Load<Texture2D>("coin-sparkle");
             colored_pack_atlas = Content.Load<Texture2D>("colored_packed");
+
+            // Load Sound Effects and Music
+            explosionSound = Content.Load<SoundEffect>("Explosion");
+            coinPickupSound = Content.Load<SoundEffect>("Pickup_Coin");
+            bombCoinPickupSound = Content.Load<SoundEffect>("Bomb_Coin");
 
             // Load fonts
             bangers = Content.Load<SpriteFont>("bangers");
